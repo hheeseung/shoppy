@@ -4,12 +4,16 @@ import { BsFillPencilFill } from "react-icons/bs";
 import { login, logout, onUserStateChange } from "../services/firebase";
 import { useEffect, useState } from "react";
 import User from "./User";
+import Button from "./ui/Button";
 
 export default function Navbar() {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    onUserStateChange(setUser);
+    onUserStateChange((user) => {
+      console.log(user);
+      setUser(user);
+    });
   }, []);
 
   return (
@@ -21,12 +25,14 @@ export default function Navbar() {
       <nav className="flex items-center gap-4 font-semibold">
         <Link to="/products">Products</Link>
         <Link to="/carts">Cart</Link>
-        <Link to="/products/new" className="text-2xl">
-          <BsFillPencilFill />
-        </Link>
+        {user && user.isAdmin && (
+          <Link to="/products/new" className="text-2xl">
+            <BsFillPencilFill />
+          </Link>
+        )}
         {user && <User user={user} />}
-        {!user && <button onClick={login}>Login</button>}
-        {user && <button onClick={logout}>Logout</button>}
+        {!user && <Button text="Login" onClick={login} />}
+        {user && <Button text="Logout" onClick={logout} />}
       </nav>
     </header>
   );
