@@ -41,11 +41,11 @@ export function onUserStateChange(callback) {
 async function adminUser(user) {
   // 2. 사용자가 admin 권한을 갖고 있는지 확인한다
   // 3. {...user, isAdmin: true / false}
-  return get(ref(database, "admin")) //
+  return get(ref(database, "admins")) //
     .then((snapshot) => {
       if (snapshot.exists()) {
-        const admin = snapshot.val();
-        const isAdmin = admin.includes(user.uid);
+        const admins = snapshot.val();
+        const isAdmin = admins.includes(user.uid);
         return { ...user, isAdmin };
       }
       return user;
